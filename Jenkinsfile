@@ -6,6 +6,17 @@ pipeline {
                 sh 'mvn --version'
             }
         }
+        stage('check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'deploy stage'
+            }
+        }
     }
     post {
         always {
