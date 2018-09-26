@@ -3,10 +3,10 @@ pipeline {
     stages {
         stage('build') {
             parallel {
-                steps {
+                stage {
                     sh 'mvn --version'
                 }
-                steps {
+                stage {
                     echo 'Build stage -1'
                 }
             }
