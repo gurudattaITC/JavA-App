@@ -1,14 +1,21 @@
 pipeline {
     agent any
     stages {
-        parallel {
         stage('build') {
             parallel {
                 stage(step1){
-                    steps {
-                        sh 'mvn --version'
+                    parallel {
+                        stage(step1a){
+                            steps {
+                                sh 'mvn --version'
+                            }
+                         }
+                        stage(step1b){
+                            steps {
+                                echo 'step 1b'
+                            }
+                        }
                     }
-                }
                 stage(step2) {
                     steps {
                         echo 'Build stage -1'
@@ -20,7 +27,6 @@ pipeline {
             steps{
                 echo 'unit test'
             }
-        }
         }
         stage('check') {
             steps {
