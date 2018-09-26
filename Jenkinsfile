@@ -16,6 +16,7 @@ pipeline {
                             }
                         }
                     }
+                }    
                 stage(step2) {
                     steps {
                         echo 'Build stage -1'
