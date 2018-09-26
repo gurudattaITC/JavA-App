@@ -2,8 +2,18 @@ pipeline {
     agent any
     stages {
         stage('build') {
-            steps {
-                sh 'mvn --version'
+            parallel {
+                steps {
+                    sh 'mvn --version'
+                }
+                steps {
+                    echo 'Build stage -1'
+                }
+            }
+        }
+        stage('Unit test') {
+            steps{
+                echo 'unit test'
             }
         }
         stage('check') {
@@ -11,7 +21,6 @@ pipeline {
                 input "Does the staging environment look ok?"
             }
         }
-
         stage('Deploy') {
             steps {
                 echo 'deploy stage'
