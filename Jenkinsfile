@@ -1,46 +1,71 @@
-pipeline {
-    agent any
-    stages {
-        stage('build') {
-           steps {
-              sh 'mvn --version'
-           }
-           steps {
-              echo 'step 1'
-           }
-        }
-        stage('Unit test') {
-            steps{
-                echo 'unit test'
-            }
-        }
-        stage('check') {
-            steps {
-                input "Does the staging environment look ok?"
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'deploy stage'
-            }
-        }
-    }
-    post {
-        always {
-            echo 'This will always run'
-        }
-        success {
-            echo 'This will run only if successful'
-        }
-        failure {
-            echo 'This will run only if failed'
-        }
-        unstable {
-            echo 'This will run only if the run was marked as unstable'
-        }
-        changed {
-            echo 'This will run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
-        }
-    }
+node {
+
+	stage('Build'){
+		sh 'echo "Build stage"'
+		stage('Build a'){
+			sh 'echo "Build stage"'
+		}
+	}
+
+	stage('API Integration Tests') {
+		parallel Database1APIIntegrationTestParallel: {
+			 stage ('Database1 API Integration Test'){
+				try {
+							   
+					sh 'echo "stage1 in Database1APIIntegrationTest"'
+				}
+				finally {
+					sh 'echo "Finished stage1 in Database1APIIntegrationTest"'
+				}               
+			}
+
+			stage ('stage2 in Database1 API Integration Test'){
+				try {
+					sh 'echo "stage2 in Database1 API Integration Test"'
+				}
+				finally {
+					sh 'echo "Finished stage2 in Database1 API Integration Test"'
+				}               
+			}
+		}, Database2APIIntegrationTestParallel: {
+			
+			stage ('stage1'){
+				try {   
+					sh 'echo "stage1 in Database2APIIntegrationTest"'
+				}
+				finally {
+					sh 'echo "Finished stage1 in Database2APIIntegrationTest"'
+				}  
+
+				stage ('stage1a in Database2APIIntegrationTest'){
+							       
+				}	
+				stage ('stage1b in Database2APIIntegrationTest'){
+							       
+				}					
+			}
+
+			stage ('stage2'){
+				try {
+					sh 'echo "stage2 in Database2APIIntegrationTest"'
+				}
+				finally {
+					sh 'echo "Finished stage2 in Database2APIIntegrationTest"'
+				}               
+			}  
+			stage ('stage3'){
+				try {
+					sh 'echo "stage2 in Database2APIIntegrationTest"'
+				}
+				finally {
+					sh 'echo "Finished stage2 in Database2APIIntegrationTest"'
+				}               
+			}  			
+		}
+		
+	}
+
+	stage('System Tests') {
+		sh 'echo "In System Tests"'
+	}
 }
