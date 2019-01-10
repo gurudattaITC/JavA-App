@@ -1,7 +1,7 @@
 node {
 
 	stage('Build'){
-		sh 'echo "Build stage"'
+		sh 'echo "New Build stage"'
 		stage('Build a'){
 			sh 'echo "Build stage"'
 		}
